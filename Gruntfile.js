@@ -15,6 +15,7 @@ module.exports = function(grunt) {
 
     // Load required modules
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-critical');
 
     // Task definitions
     grunt.registerTask('default',['']);
