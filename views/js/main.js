@@ -504,7 +504,7 @@ function updatePositions() {
   window.performance.mark("mark_start_frame");
 
   // var a = document.body.scrollTop;
-  var phrase;
+  var phase;
   var items = document.querySelectorAll('.mover');
   var scroll = latestKnownScrolly / 1250;
 
