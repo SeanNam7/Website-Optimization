@@ -501,11 +501,11 @@ function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
 
+  var a = document.body.scrollTop;
   var items = document.querySelectorAll('.mover');
-  var scroll = document.body.scrollTop;
 
-  for (var i = 0, rand =  items.length; i < rand; i++) {
-    var phase = Math.sin((scroll / 1250) + (i % 5));
+  for (var i = 0; i < items.length; i++) {
+    var phase = Math.sin((a/ 1250) + (i % 5));
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
 
@@ -517,10 +517,11 @@ function updatePositions() {
     var timesToUpdatePosition = window.performance.getEntriesByName("measure_frame_duration");
     logAverageFrame(timesToUpdatePosition);
   }
+  requestAnimationFrame(updatePositions);
 }
 
 // runs updatePositions on scroll
-window.addEventListener('scroll', updatePositions);
+window.addEventListener('scroll', requestAnimationFrame(updatePositions));
 
 // Generates the sliding pizzas when the page loads.
 document.addEventListener('DOMContentLoaded', function() {
