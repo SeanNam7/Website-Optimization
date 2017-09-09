@@ -468,8 +468,9 @@ var resizePizzas = function(size) {
 window.performance.mark("mark_start_generating"); // collect timing data
 
 // This for-loop actually creates and appends all of the pizzas when the page loads
+var pizzasDiv;
 for (var i = 2; i < 100; i++) {
-  var pizzasDiv = document.getElementById("randomPizzas");
+  pizzasDiv = document.getElementById("randomPizzas");
   pizzasDiv.appendChild(pizzaElementGenerator(i));
 }
 
@@ -499,13 +500,16 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 // Moves the sliding background pizzas based on scroll position
 function updatePositions() {
   frame++;
+  ticking = false; // reset tick to capture the next scroll on scroll
   window.performance.mark("mark_start_frame");
 
-  var a = document.body.scrollTop;
+  // var a = document.body.scrollTop;
+  var phrase;
   var items = document.querySelectorAll('.mover');
+  var scroll = latestKnownScrolly / 1250;
 
-  for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin((a/ 1250) + (i % 5));
+  for (var i = 0, len = items.length; i < len; i++) {
+    phase = Math.sin((scroll) + (i % 5));
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
 
@@ -517,11 +521,27 @@ function updatePositions() {
     var timesToUpdatePosition = window.performance.getEntriesByName("measure_frame_duration");
     logAverageFrame(timesToUpdatePosition);
   }
-  requestAnimationFrame(updatePositions);
+  // requestAnimationFrame(updatePositions);
 }
 
 // runs updatePositions on scroll
-window.addEventListener('scroll', requestAnimationFrame(updatePositions));
+// window.addEventListener('scroll', requestAnimationFrame(updatePositions));
+
+// the following code for requestAnimationFrame was pulled from:
+// https://www.html5rocks.com/en/tutorials/speed/animations/
+var latestKnownScrolly = 0,
+  ticking = false;
+window.addEventListener('scroll', function() {
+  latestKnownScrolly = window.scrollY;
+  requestTick();
+});
+
+function requestTick() {
+  if (!ticking) {
+      requestAnimationFrame(updatePositions);
+  }
+  ticking = true;
+}
 
 // Generates the sliding pizzas when the page loads.
 document.addEventListener('DOMContentLoaded', function() {
