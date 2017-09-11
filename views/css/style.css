@@ -29,10 +29,12 @@ form {
   font-weight: 800;
 }
 
+ /*Added transform: translateZ*/
 .mover {
   position: fixed;
   width: 256px;
   z-index: -1;
+  transform: translateZ(0);
 }
 
 .randomPizzaContainer {
